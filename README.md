@@ -15,7 +15,7 @@ This project follows Microservices Architecture and consists of the following co
 
 | Service                                                                   | Description                                                                             |
 |---------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
-| [auth_service](https://github.com/Asadjon/balance_service.git)            | Manages user registration, login, and token validation.                                 |
+| [auth_service](https://github.com/Asadjon/auth_service.git)               | Manages user registration, login, and token validation.                                 |
 | [balance_service](https://github.com/Asadjon/balance_service.git)         | Handles balance tracking and updates for each user.                                     |
 | [transaction_service](https://github.com/Asadjon/transaction_service.git) | Records all user transactions and manages the logic of deposit, withdraw, and transfer. |
 | [api_gateway](https://github.com/Asadjon/api_gateway.git)                 | Routes client requests to appropriate services and validates authorization tokens.      |
@@ -58,8 +58,16 @@ All services are containerized and orchestrated using **Docker Compose**.
     * `balance_service/.env`
     * `transaction_service/.env`
     * `api_gateway/test.env`
+3. **🔌 Create Shared Docker Network**
+   Before running the services, you must create a shared Docker network manually:
+   ```bash
+   docker network create app-network
+   ```
+   > This command ensures all microservices can communicate with each other using the `app-network`.
+   
+   You only need to run this once before starting any of the services.
 
-3. **🐳 Running Services Individually with Docker Compose**\
+5. **🐳 Running Services Individually with Docker Compose**\
    Each service has its own `docker-compose.yml` file located inside its respective directory. Use the following commands to start each service individually:
     ```bash
     # Start Auth Service
@@ -86,7 +94,7 @@ All services are containerized and orchestrated using **Docker Compose**.
 **A:** _This service is part of a microservices architecture. The API Gateway acts as the single entry point for clients and handles routing and security._
 
 **Q:** _What type of authentication is used?_ \
-**A:** _**JWT (JSON Web Token)** based authentication is implemented via the custom **AuthenticationFilter**, which communicates with the [auth_service](https://github.com/Asadjon/balance_service.git)._
+**A:** _**JWT (JSON Web Token)** based authentication is implemented via the custom **AuthenticationFilter**, which communicates with the [auth_service](https://github.com/Asadjon/auth_service.git)._
 
 **Q:** _What happens if the user tries to transfer more than their balance?_\
 **A:** _The transaction will fail, and the response will contain a message like `"Amount must be greater than current balance"`._
